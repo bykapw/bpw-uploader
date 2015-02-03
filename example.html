@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head><title>Example</title>
+    <script src="jquery.js"></script>
+    <script src="jquery.bpw-upload.js"></script>
+    <link rel="stylesheet" href="jquery.bpw-upload.css">
+</head>
+<body>
+
+ <h1>Example</h1>
+
+<script>
+var upl=null;
+$(document).ready(function(){
+  $('#upl1').uploader({
+      multiple:false,                       // upload only 1 file
+      list:$('#filename1'),                 // where show selected file name
+      listformat:'<T>, <N>, <S>',           // format, <T> - content-type, <N> - file name, <S> - file size
+      autosubmit:true,                      // autosubmit
+      url:'http://localhost:3000/upload2',  // uload URL
+      onCompleted:function(evt){
+        alert(evt.target.responseText);
+        },
+      onFailed:function(evt){
+        alert('Upload failed!');
+        },
+      onCanceled:function(evt){
+        alert('Cancel!');
+        },
+      progressbar:$('#bar1'),
+      progresscounter:$('#counter1'),
+      });
+
+    upl=$('#upl2').uploader({
+      multiple:true,
+      list:$('#filename2'),
+      listformat:'<N>, <T>, <S> <br>',
+      autosubmit:false,
+      url:'http://localhost:3000/upload2',
+      onCompleted:function(evt){
+        alert(evt.target.responseText);
+        },
+      onFailed:function(evt){
+        alert('Upload failed!');
+        },
+      onCanceled:function(evt){
+        alert('Cancel!');
+        },
+      progressbar:$('#bar2'),
+      progresscounter:$('#counter2'),
+      });
+});
+</script>
+
+  <h2>Use span as upload button</h2>
+
+  <span id="upl1" style="border:1px solid red"><nobr>Press me!</nobr></span><br>
+
+  File: <span id="filename1"></span><br>
+  <div style="border:1px solid #cecece;height:10px;width:600px;">
+   <div style="background:#00f;height:100%;width:0%" id="bar1"></div>
+  </div>
+  <span id="counter1"></span>
+
+  <h2>Use image as upload button</h2>
+
+  <img id="upl2" src="go-up.png" >
+  <br>
+  <i>select multiple files and press "Send to server"</i>
+  <br>
+  <br>
+
+  Files:<br>
+  <div id="filename2"></div><br>
+  <input type="button" value="Send to server" onclick="upl.upload()"><br>
+  <br>
+
+  <div style="border:1px solid #cecece;height:10px;width:600px;">
+   <div style="background:#00f;height:100%;width:0%" id="bar2"></div>
+  </div>
+  <span id="counter2"></span>
+
+
+</body>
+</html>
+
