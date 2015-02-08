@@ -1,6 +1,72 @@
-// version 0.1
+// version 0.2
 (function($) {
   $.fn.extend({
+    dragndrop: function(options){
+      options=options||{};
+      var dropZone = $(this);
+      var oldtext=dropZone.html();
+      if (typeof(window.FileReader) == 'undefined') {
+        dropZone.addClass('bpw-unsupported');
+        return false;
+      }
+      dropZone[0].ondragover = function() {
+        dropZone.addClass('bpw-hover');
+        return false;
+      };
+      dropZone[0].ondragleave = function() {
+        dropZone.removeClass('bpw-hover');
+        return false;
+      };
+      dropZone[0].ondrop = function(event) {
+        event.preventDefault();
+        dropZone.removeClass('bpw-hover');
+        dropZone.addClass('bpw-drop');
+        var file = event.dataTransfer.files[0];
+              
+        var name=options.name||'file';
+        var fd = new FormData();
+        fd.append(name, file);
+        var xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("load", function(evt){
+          dropZone.removeClass('bpw-drop');
+          dropZone.addClass('bpw-complete');
+          dropZone.html(evt.target.responseText);
+        }, false);
+
+        xhr.addEventListener("error", function(){
+          dropZone.removeClass('bpw-drop');
+          dropZone.addClass('bpw-error');
+          dropZone.html(oldtext);
+        }, false);
+
+        xhr.addEventListener("abort", function(){
+          dropZone.removeClass('bpw-drop');
+          dropZone.addClass('bpw-error');
+          dropZone.html(oldtext);
+        }, false);
+
+        xhr.upload.addEventListener("progress", function(evt){
+          if (evt.lengthComputable) {
+            var value = Math.round(evt.loaded * 100 / evt.total);
+            dropZone.text(value+'%');
+          }else {
+            dropZone.text('loading...');
+          }
+        }, false);
+
+        xhr.open("POST", options.url);
+        xhr.send(fd);
+        //////////////////////
+        //var xhr = new XMLHttpRequest();
+        //xhr.upload.addEventListener('progress', uploadProgress, false);
+        //xhr.onreadystatechange = stateChange;
+        //xhr.open("POST", this.options.url);
+        //xhr.setRequestHeader('X-FILE-NAME', file.name);
+        //xhr.send(file);
+        ////////////////////////
+      };
+    },
     onProgress: function(evt) {
       var obj=this.xparam;
       if(obj){
@@ -28,9 +94,11 @@
         var name=this.options.name||'file';
         var fd = new FormData();
         if(this.options.multiple){
-          for(var i=0;i<len;i++){
+          var i=0;
+          for(i=0;i<len;i++){
             fd.append(name+''+i, this.filer[0].files[i]);
           }
+          fd.append('count',i);
         }else{
           fd.append(name, this.filer[0].files[0]);
         }

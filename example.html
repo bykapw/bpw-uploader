@@ -7,6 +7,20 @@
 </head>
 <body>
 
+<style>
+#dropZone {    
+  color: #555;
+  text-align: center;    
+  width: 300px;
+  padding: 50px 0;
+  margin: 50px ;
+  background: #eee;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+</style>
+
  <h1>Example</h1>
 
 <script>
@@ -49,7 +63,13 @@ $(document).ready(function(){
       progressbar:$('#bar2'),
       progresscounter:$('#counter2'),
       });
+    ////////////////////
+    $('#dropZone').dragndrop({
+      url:'http://localhost:3000/upload2',
+      name:'file',
+    });
 });
+
 </script>
 
   <h2>Use span as upload button</h2>
@@ -80,6 +100,13 @@ $(document).ready(function(){
   </div>
   <span id="counter2"></span>
 
+  <h2>Drag and drop</h2>
+
+  <form action="/upload.php">
+   <div id="dropZone" >
+    upload zone
+   </div>
+  </form>  
 
 </body>
 </html>

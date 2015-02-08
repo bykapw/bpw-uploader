@@ -11,3 +11,24 @@
     top:0;
     margin-top:-100%;
 }
+
+.bpw-unsupported {
+  display:none!important;
+}
+.bpw-hover {
+  background: #ddd!important;
+  border-color: #aaa!important;
+}
+.bpw-error {
+  background: #faa!important;
+  border-color: #f00!important;
+}
+.bpw-drop {
+  background: #afa!important;
+  border-color: #0f0!important;
+}
+.bpw-complete {
+  background: #aaf!important;
+  border-color: #00f!important;
+}
+
